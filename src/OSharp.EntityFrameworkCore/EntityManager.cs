@@ -14,10 +14,11 @@ namespace OSharp.Entity;
 /// </summary>
 public class EntityManager : IEntityManager
 {
-    private readonly ConcurrentDictionary<Type, IEntityRegister[]> _entityRegistersDict
-        = new ConcurrentDictionary<Type, IEntityRegister[]>();
+    private readonly ConcurrentDictionary<Type, IEntityRegister[]> _entityRegistersDict = new();
     private readonly ILogger _logger;
     private bool _initialized;
+
+    public static bool IncludeSpecialTable = true;
 
     /// <summary>
     /// 初始化一个<see cref="EntityManager"/>类型的新实例
@@ -33,7 +34,7 @@ public class EntityManager : IEntityManager
     public virtual void Initialize()
     {
         var dict = _entityRegistersDict;
-        Type[] types = AssemblyManager.FindTypesByBase<IEntityRegister>();
+        Type[] types = AssemblyManager.FindTypesByBase<IEntityRegister>().Where(m => !m.IsNestedPrivate).ToArray();
         if (types.Length == 0 || _initialized)
         {
             _logger.LogDebug("数据库上下文实体已初始化，跳过");
@@ -48,14 +49,14 @@ public class EntityManager : IEntityManager
         foreach (IGrouping<Type, IEntityRegister> group in groups)
         {
             key = group.Key ?? typeof(DefaultDbContext);
-            List<IEntityRegister> list = dict.ContainsKey(key) ? dict[key].ToList() : new List<IEntityRegister>();
+            List<IEntityRegister> list = dict.TryGetValue(key, out var value) ? value.ToList() : new List<IEntityRegister>();
             list.AddRange(group);
             dict[key] = list.ToArray();
         }
 
         //添加框架的一些默认实体的实体映射信息（如果不存在）
         key = typeof(DefaultDbContext);
-        if (dict.ContainsKey(key))
+        if (dict.ContainsKey(key) && IncludeSpecialTable)
         {
             List<IEntityRegister> list = dict[key].ToList();
             list.AddIfNotExist(new EntityInfoConfiguration(), m => m.EntityType.IsBaseOn<IEntityInfo>());
@@ -87,7 +88,7 @@ public class EntityManager : IEntityManager
         {
             throw new OsharpException("数据访问模块未初始化，请确认数据上下文配置节点 OSharp:DbContexts 与要使用的数据库类型是否匹配");
         }
-        return _entityRegistersDict.ContainsKey(dbContextType) ? _entityRegistersDict[dbContextType] : Array.Empty<IEntityRegister>();
+        return _entityRegistersDict.TryGetValue(dbContextType, out var value) ? value : Array.Empty<IEntityRegister>();
     }
 
     /// <summary>
