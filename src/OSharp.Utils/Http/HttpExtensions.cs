@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="HttpClientExtensions.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2017 OSharp. All rights reserved.
 //  </copyright>
@@ -13,9 +13,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 
 using OSharp.Extensions;
 
@@ -38,7 +37,7 @@ namespace OSharp.Http
             {
                 return json as TResult;
             }
-            return JsonConvert.DeserializeObject<TResult>(json);
+            return JsonSerializer.Deserialize<TResult>(json);
         }
 
         /// <summary>
@@ -66,14 +65,15 @@ namespace OSharp.Http
             HttpResponseMessage response = await client.PostAsync(url, data);
             if (!response.IsSuccessStatusCode)
             {
-                return default(TResult);
+                return null;
             }
             string json = await response.Content.ReadAsStringAsync();
             if (typeof(TResult) == typeof(string))
             {
                 return json as TResult;
             }
-            return JsonConvert.DeserializeObject<TResult>(json);
+
+            return JsonSerializer.Deserialize<TResult>(json);
         }
 
         /// <summary>

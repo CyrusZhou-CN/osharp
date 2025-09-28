@@ -161,8 +161,11 @@ public abstract class HubClientBase : IHubClient
     {
         int delay = Random.Next(0, 5);
         await Output.StatusBarCountdown("{0}秒后重试连接通信服务器", delay);
-        await HubConnection.StartAsync();
-        Output.StatusBar($"通信服务器连接{(HubConnection.State == HubConnectionState.Connected ? "成功" : "失败")}");
+        if (HubConnection.State == HubConnectionState.Disconnected)
+        {
+            await HubConnection.StartAsync();
+            Output.StatusBar($"通信服务器连接{(HubConnection.State == HubConnectionState.Connected ? "成功" : "失败")}");
+        }
     }
 
     /// <summary>

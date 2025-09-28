@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="JsonContent.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2019 OSharp. All rights reserved.
 //  </copyright>
@@ -9,8 +9,7 @@
 
 using System.Net.Http;
 using System.Text;
-
-using Newtonsoft.Json;
+using System.Text.Json;
 
 
 namespace OSharp.Http
@@ -24,7 +23,7 @@ namespace OSharp.Http
         /// 初始化一个<see cref="JsonContent"/>类型的新实例
         /// </summary>
         public JsonContent(object obj)
-            : base(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json")
+            : base(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json")
         { }
     }
 }
