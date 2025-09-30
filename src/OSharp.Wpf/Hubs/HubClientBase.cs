@@ -8,6 +8,9 @@
 // -----------------------------------------------------------------------
 
 
+using System.ComponentModel.DataAnnotations.Schema;
+
+
 namespace OSharp.Wpf.Hubs;
 
 /// <summary>
