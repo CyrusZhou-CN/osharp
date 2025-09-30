@@ -7,6 +7,8 @@
 //  <last-date>2018-07-15 10:22</last-date>
 // -----------------------------------------------------------------------
 
+using System.Text.Json;
+
 namespace OSharp.Filter;
 
 /// <summary>
@@ -364,38 +366,55 @@ public static class FilterHelper
 
     private static Expression ChangeTypeToExpression(FilterRule rule, Type conversionType)
     {
-        //if (item.Method == QueryMethod.StdIn)
-        //{
-        //    Array array = (item.Value as Array);
-        //    List<Expression> expressionList = new List<Expression>();
-        //    if (array != null)
-        //    {
-        //        expressionList.AddRange(array.Cast<object>().Select((t, i) =>
-        //            ChangeType(array.GetValue(i), conversionType)).Select(newValue => Expression.Constant(newValue, conversionType)));
-        //    }
-        //    return Expression.NewArrayInit(conversionType, expressionList);
-        //}
-        if (rule.Value?.ToString() == UserFlagAttribute.Token)
+        if (rule.Value == null)
         {
-            // todo: 将UserFlag之类的功能提升为接口进行服务注册，好方便实现自定义XXXFlag
-            if (rule.Operate != FilterOperate.Equal)
-            {
-                throw new OsharpException($"当前用户“{rule.Value}”只能用在“{FilterOperate.Equal.ToDescription()}”操作中");
-            }
-            ClaimsPrincipal user = ServiceLocator.Instance.GetCurrentUser();
-            if (user == null || !user.Identity.IsAuthenticated)
-            {
-                throw new OsharpException("需要获取当前用户编号，但当前用户为空，可能未登录或已过期");
-            }
-            object value = user.Identity.GetClaimValueFirstOrDefault(ClaimTypes.NameIdentifier);
-            value = value.CastTo(conversionType);
-            return Expression.Constant(value, conversionType);
+            return Expression.Constant(null, conversionType);
         }
-        else
+
+        var valueType = rule.Value.GetType();
+        var value = rule.Value;
+
+        // 处理 JsonElement 类型
+        if (valueType.Name == "JsonElement")
         {
-            object value = rule.Value.CastTo(conversionType);
-            return Expression.Constant(value, conversionType);
+            var jsonElement = (JsonElement)value;
+            value = jsonElement.ValueKind switch
+            {
+                JsonValueKind.String => jsonElement.GetString(),
+                JsonValueKind.Number => jsonElement.TryGetInt64(out var l) ? l : jsonElement.GetDouble(),
+                JsonValueKind.True => true,
+                JsonValueKind.False => false,
+                JsonValueKind.Null => null,
+                _ => value
+            };
+            if (value != null)
+            {
+                valueType = value.GetType();
+            }
         }
+
+        if (value == null)
+        {
+            return Expression.Constant(null, conversionType);
+        }
+
+        // 获取目标类型（如果是可空类型，获取其基础类型）
+        var targetType = conversionType.IsNullableType()
+            ? Nullable.GetUnderlyingType(conversionType) ?? conversionType
+            : conversionType;
+
+        // 转换值到目标类型
+        if (targetType.IsEnum)
+        {
+            value = valueType == typeof(string) ? Enum.Parse(targetType, value.ToString()!) : Enum.ToObject(targetType, value);
+        }
+        else if (valueType != targetType)
+        {
+            value = targetType == typeof(Guid) ? Guid.Parse(value.ToString()!) : Convert.ChangeType(value, targetType);
+        }
+
+        // 返回与conversionType匹配的常量表达式
+        return Expression.Constant(value, conversionType);
     }
 
     #endregion
