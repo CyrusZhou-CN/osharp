@@ -93,14 +93,12 @@ namespace OSharp.NLog
             return null;
         }
 
-        protected override void Dispose(bool disposing)
+        /// <summary>
+        /// 重写以实现释放派生类资源的逻辑
+        /// </summary>
+        protected override void Disposing()
         {
-            if (!Disposed)
-            {
-                _loggers.Clear();
-            }
-
-            base.Dispose(disposing);
+            _loggers.Clear();
         }
     }
 }

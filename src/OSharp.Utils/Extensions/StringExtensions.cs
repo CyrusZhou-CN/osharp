@@ -686,6 +686,12 @@ namespace OSharp.Extensions
             return Convert.ToBase64String(encoding.GetBytes(source));
         }
 
+        public static byte[] FromBase64StringToBytes(this string base64String)
+        {
+            byte[] bytes = Convert.FromBase64String(base64String);
+            return bytes;
+        }
+
         /// <summary>
         /// 将Base64字符串转换为正常字符串，默认编码为<see cref="Encoding.UTF8"/>
         /// </summary>
@@ -698,7 +704,8 @@ namespace OSharp.Extensions
             {
                 encoding = Encoding.UTF8;
             }
-            byte[] bytes = Convert.FromBase64String(base64String);
+
+            byte[] bytes = base64String.FromBase64StringToBytes();
             return encoding.GetString(bytes);
         }
 
