@@ -23,4 +23,5 @@ public class RoleStore : OSharp.Identity.RoleStoreBase<Role, int, RoleClaim, int
     public RoleStore(IRepository<Role, int> roleRepository, IRepository<RoleClaim, int> roleClaimRepository)
         : base(roleRepository, roleClaimRepository)
     { }
+
 }

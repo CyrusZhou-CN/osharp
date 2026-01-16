@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="UserStoreBase.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2020 OSharp. All rights reserved.
 //  </copyright>
@@ -1295,6 +1295,18 @@ public abstract class UserStoreBase<TUser, TUserKey, TUserClaim, TUserClaimKey, 
         {
             throw new ObjectDisposedException(GetType().Name);
         }
+    }
+
+    #endregion
+
+    #region Overrides of Disposable
+
+    /// <summary>
+    /// 重写以实现释放派生类资源的逻辑
+    /// </summary>
+    protected override void Disposing()
+    {
+        
     }
 
     #endregion

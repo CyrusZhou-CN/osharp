@@ -36,4 +36,5 @@ public class UserStore : UserStoreBase<User, int, UserClaim, int, UserLogin, Gui
         IEventBus eventBus)
         : base(userRepository, userLoginRepository, userClaimRepository, userTokenRepository, roleRepository, userRoleRepository, eventBus)
     { }
+
 }

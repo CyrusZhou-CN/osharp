@@ -336,4 +336,16 @@ public abstract class RoleStoreBase<TRole, TRoleKey, TRoleClaim, TRoleClaimKey>
     }
 
     #endregion
+    
+    #region Overrides of Disposable
+
+    /// <summary>
+    /// 重写以实现释放派生类资源的逻辑
+    /// </summary>
+    protected override void Disposing()
+    {
+        
+    }
+
+    #endregion
 }
