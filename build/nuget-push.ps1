@@ -19,7 +19,7 @@ function GetVersion()
 $server = "https://www.nuget.org"
 $readkey = Read-Host "默认服务器为nuget.org，确认按回车键`n如要切换为nuget.66soft.net，按 1`n如要切换为ncc.myget.org，按 2`n如要切换为osharp.myget.org，按3"
 if ($readkey -eq 1) {
-    $server = "http://nuget.66soft.net/nuget"
+    $server = "https://nuget.66soft.net/nuget"
 }
 elseif ($readkey -eq 2) {
     $server = "https://www.myget.org/F/ncc/api/v2/package"

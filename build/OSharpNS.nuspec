@@ -1,37 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
-  <metadata>
-    <id>OSharpNS</id>
-    <version>9.0.0-preview.304</version>
-    <title>OSharpFramework(.NET6.0/.NETCoreApp3.1)</title>
-    <authors>柳柳软件(66soft.net)</authors>
-    <owners>LiuliuSoft nnc</owners>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <license type="expression">Apache-2.0</license>
-    <icon>icon.png</icon>
-    <projectUrl>https://github.com/dotnetcore/osharp</projectUrl>
-    <description>OSharp Framework with .NET，此Package包含了OSharp的所有常用组件</description>
-    <releaseNotes>https://github.com/dotnetcore/osharp/releases</releaseNotes>
-    <copyright>Copyright (c) 2014-2022 LIULIUSOFT. All rights reserved.</copyright>
-    <tags>osharp</tags>
-    <dependencies>
-      <group targetFramework=".NETCoreApp3.1">
-        <dependency id="OSharp.Core" version="9.0.0-preview.304" />
-        <dependency id="OSharp.EntityFrameworkCore" version="9.0.0-preview.304" />
-        <dependency id="OSharp.AutoMapper" version="9.0.0-preview.304" />
-        <dependency id="OSharp.AspNetCore" version="9.0.0-preview.304" />
-        <dependency id="OSharp.Log4Net" version="9.0.0-preview.304" />
-      </group>
-      <group targetFramework="net6.0">
-        <dependency id="OSharp.Core" version="9.0.0-preview.304" />
-        <dependency id="OSharp.EntityFrameworkCore" version="9.0.0-preview.304" />
-        <dependency id="OSharp.AutoMapper" version="9.0.0-preview.304" />
-        <dependency id="OSharp.AspNetCore" version="9.0.0-preview.304" />
-        <dependency id="OSharp.Log4Net" version="9.0.0-preview.304" />
-      </group>
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="icon.png" target="icon.png" />
-  </files>
+    <metadata>
+        <id>OSharpNS</id>
+        <version>10.0.0</version>
+        <title>OSharpFramework</title>
+        <authors>柳柳软件(66soft.net)</authors>
+        <owners>LiuliuSoft nnc</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <license type="expression">Apache-2.0</license>
+        <icon>icon.png</icon>
+        <projectUrl>https://github.com/dotnetcore/osharp</projectUrl>
+        <description>OSharp Framework with .NET，此Package包含了OSharp的所有常用组件</description>
+        <releaseNotes>https://github.com/dotnetcore/osharp/releases</releaseNotes>
+        <copyright>Copyright (c) 2014-2026 LIULIUSOFT. All rights reserved.</copyright>
+        <tags>osharp</tags>
+        <dependencies>
+            <dependency id="OSharp.Core" version="10.0.0" />
+            <dependency id="OSharp.EntityFrameworkCore" version="10.0.0" />
+            <dependency id="OSharp.AutoMapper" version="10.0.0" />
+            <dependency id="OSharp.AspNetCore" version="10.0.0" />
+            <dependency id="OSharp.Log4Net" version="10.0.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="icon.png" target="icon.png" />
+    </files>
 </package>
